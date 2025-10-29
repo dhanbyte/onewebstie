@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Sync Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { 
+            padding: 15px; 
+            margin: 15px 0; 
+            background: #f8f9fa; 
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+        }
+        .success { border-left-color: #28a745; background: #d4edda; }
+        .error { border-left-color: #dc3545; background: #f8d7da; }
+        .test-button { 
+            padding: 10px 20px; 
+            margin: 5px; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer;
+        }
+        .test-button:hover { background: #0056b3; }
+        pre { background: #f1f3f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔄 Customer Database Sync Test</h1>
+    
+    <div class="test-section">
+        <h3>🎯 Issue Identified:</h3>
+        <p>Login and Signup APIs were using different database connections:</p>
+        <ul>
+            <li><strong>Login:</strong> MongoDB User model ✅</li>
+            <li><strong>Signup:</strong> Different database collection ❌</li>
+        </ul>
+        <p><strong>Fix Applied:</strong> Both APIs now use MongoDB User model consistently</p>
+    </div>
+    
+    <div class="test-section success">
+        <h3>✅ Fixed Components:</h3>
+        <ul>
+            <li>Signup API now uses MongoDB User model</li>
+            <li>Login API response format standardized</li>
+            <li>User model enhanced with phone field</li>
+            <li>Consistent data structure across APIs</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h3>🧪 Test Steps:</h3>
+        <ol>
+            <li><strong>Test Signup:</strong> Register new user on website</li>
+            <li><strong>Check Admin:</strong> Verify user appears in admin customers</li>
+            <li><strong>Test Login:</strong> Login with registered user</li>
+            <li><strong>Place Order:</strong> Make a test purchase</li>
+            <li><strong>Verify Data:</strong> Check customer stats in admin</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h3>🔗 Test Links:</h3>
+        <button class="test-button" onclick="window.open('/register', '_blank')">Register New User</button>
+        <button class="test-button" onclick="window.open('/sign-in', '_blank')">Login Page</button>
+        <button class="test-button" onclick="window.open('/admin/customers', '_blank')">Admin Customers</button>
+        <button class="test-button" onclick="testAPI()">Test Customer API</button>
+    </div>
+    
+    <div id="api-result" class="test-section" style="display: none;">
+        <h3>📊 API Response:</h3>
+        <pre id="api-data"></pre>
+    </div>
+    
+    <div class="test-section">
+        <h3>📋 Expected Customer Data Structure:</h3>
+        <pre>
+{
+  "_id": "user_id",
+  "name": "User Name",
+  "email": "user@example.com", 
+  "phone": "optional_phone",
+  "referralCode": "ABC123XYZ",
+  "referralBalance": 0,
+  "totalEarned": 0,
+  "referralCount": 0,
+  "hasMadePurchase": false,
+  "totalOrders": 0,
+  "totalSpent": 0,
+  "status": "New|Active",
+  "joinedDate": "2024-01-01",
+  "lastActivity": "2024-01-01"
+}
+        </pre>
+    </div>
+    
+    <script>
+        async function testAPI() {
+            try {
+                const response = await fetch('/api/admin/customers');
+                const data = await response.json();
+                
+                document.getElementById('api-result').style.display = 'block';
+                document.getElementById('api-data').textContent = JSON.stringify(data, null, 2);
+                
+                if (data.success && data.customers.length > 0) {
+                    document.getElementById('api-result').className = 'test-section success';
+                } else {
+                    document.getElementById('api-result').className = 'test-section error';
+                }
+            } catch (error) {
+                document.getElementById('api-result').style.display = 'block';
+                document.getElementById('api-result').className = 'test-section error';
+                document.getElementById('api-data').textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
