@@ -9,12 +9,23 @@ yarn-error.log*
 out/
 build/
 
-# Environment variables
+# Environment variables - ALL ENV FILES
+.env*
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+.env.example
+.env.template
+*.env
+*.env.local
+*.env.production
+*.env.development
+*.env.test
+vercel-env-*.txt
+VERCEL_ENV_*.md
 
 # IDE
 .vscode/
